@@ -63,10 +63,14 @@ const App = () => {
           setErrorMessage(`${newName} is successfully added to phonebook`)
           setNewName('')
           setNewNumber('')
-          setTimeout(() => {
-            setErrorMessage(null)
-          }, 5000)
         })
+        .catch(error => {
+          setErrorMessage(`${error.response.data.error}`)
+          console.log(error.res.data)
+        })
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
     }
   }
 
