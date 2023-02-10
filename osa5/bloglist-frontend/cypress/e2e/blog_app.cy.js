@@ -46,8 +46,6 @@ describe('Blog app', function() {
       beforeEach(function() {
          cy.login({ username: 'test', password: 'test' })
          cy.createBlog({ title: 'test blog', author: 'admin', url: 'testing.com' })
-         /*cy.createBlog({ title: 'test blog 2', author: 'admin', url: 'testing.com', likes: 1 })
-         cy.createBlog({ title: 'test blog 3', author: 'admin', url: 'testing.com', likes: 2 })*/
       })
 
       it('A blog can be created', function() {

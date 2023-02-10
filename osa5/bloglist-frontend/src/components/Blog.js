@@ -24,19 +24,3 @@ const Blog = ({ blog, handleLike, handleRemove, user }) => {
    )}
 
 export default Blog
-/*<div className='blogstyle'>
-         {show === false ?
-            <div className='blog'>
-               {blog.title} <b>{blog.author}</b> <button onClick={() => setShow(!show)}>view</button>
-            </div> :
-            <div className='blog-view'>
-               <div>{blog.title} <button onClick={() => setShow(false)}>hide</button></div>
-               <div>{blog.url}</div>
-               <div id='blogLike'>{blog.likes} <button onClick={() => handleLike(blog.id)}>like</button></div>
-               <div>{blog.author}</div>
-               {blog.user.username === user.username &&
-                  <button onClick={() => handleRemove(blog.id)}>remove</button>
-               }
-            </div>
-         }
-      </div> */
