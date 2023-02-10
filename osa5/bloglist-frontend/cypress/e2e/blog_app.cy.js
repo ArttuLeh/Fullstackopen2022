@@ -73,7 +73,6 @@ describe('Blog app', function() {
          cy.contains('remove').click()
 
          cy.on('window:confirm', function(text) {
-            //cy.get(text).should('contain', 'Remove blog test blog by admin')
             expect(text).to.contain('Remove blog test blog by admin')
          })
          cy.get('html').should('not.contain', 'test blog')
