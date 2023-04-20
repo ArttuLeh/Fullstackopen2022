@@ -1,0 +1,19 @@
+.footer {
+  color: 'black';
+  font-style: 'italic';
+  font-size: 16;
+}
+.btn-dark {
+  margin: 2px;
+}
+.btn-light {
+  margin-right: 5px;
+}
+a {
+  text-decoration: none;
+  color: black;
+}
+a:hover {
+  color: grey;
+  text-decoration: underline;
+}
