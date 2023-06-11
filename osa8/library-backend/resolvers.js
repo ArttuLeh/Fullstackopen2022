@@ -1,90 +1,13 @@
-const { ApolloServer } = require('@apollo/server')
-const { expressMiddleware } = require('@apollo/server/express4')
-const {
-  ApolloServerPluginDrainHttpServer,
-} = require('@apollo/server/plugin/drainHttpServer')
-const { makeExecutableSchema } = require('@graphql-tools/schema')
-const express = require('express')
-const cors = require('cors')
-const http = require('http')
-const { WebSocketServer } = require('ws')
-const { useServer } = require('graphql-ws/lib/use/ws')
-
+const { GraphQLError } = require('graphql')
 const jwt = require('jsonwebtoken')
-const mongoose = require('mongoose')
+const { PubSub } = require('graphql-subscriptions')
 
-const typeDefs = require('./schema')
-const resolvers = require('./resolvers')
-
-mongoose.set('strictQuery', false)
+const Book = require('./models/book')
+const Author = require('./models/author')
 const User = require('./models/user')
-const { hrtime } = require('process')
+const pubsub = new PubSub()
 
-require('dotenv').config()
-const MONGODB_URI = process.env.MONGODB_URI
-
-console.log(('connectting to', MONGODB_URI))
-
-mongoose
-  .connect(MONGODB_URI)
-  .then(() => {
-    console.log('connect to MongoDb')
-  })
-  .catch((error) => {
-    console.log('error connection to MongoDb', error.message)
-  })
-
-const start = async () => {
-  const app = express()
-  const httpServer = http.createServer(app)
-
-  const wsServer = new WebSocketServer({
-    server: httpServer,
-    path: '/',
-  })
-  const schema = makeExecutableSchema({ typeDefs, resolvers })
-  const serverCleanup = useServer({ schema }, wsServer)
-  const server = new ApolloServer({
-    schema,
-    plugins: [
-      ApolloServerPluginDrainHttpServer({ httpServer }),
-      {
-        async serverWillStart() {
-          return {
-            async drainServer() {
-              await serverCleanup.dispose()
-            },
-          }
-        },
-      },
-    ],
-  })
-  await server.start()
-  app.use(
-    '/',
-    cors(),
-    express.json(),
-    expressMiddleware(server, {
-      context: async ({ req }) => {
-        const auth = req ? req.headers.authorization : null
-        if (auth && auth.startsWith('Bearer ')) {
-          const decodedToken = jwt.verify(
-            auth.substring(7),
-            process.env.JWT_SECRET
-          )
-          const currentUser = await User.findById(decodedToken.id)
-          return { currentUser }
-        }
-      },
-    })
-  )
-  const PORT = 4000
-  httpServer.listen(PORT, () =>
-    console.log(`Server is now running on http://localhost:${PORT}`)
-  )
-}
-start()
-/*const resolvers = {
+const resolvers = {
   Query: {
     bookCount: async () => Book.collection.countDocuments(),
     authorCount: async () => Author.collection.countDocuments(),
@@ -166,6 +89,7 @@ start()
           },
         })
       }
+      pubsub.publish('BOOK_ADDED', { bookAdded: book })
       return book
     },
     editAuthor: async (root, args, context) => {
@@ -196,7 +120,6 @@ start()
     },
     createUser: async (root, args) => {
       const user = new User({ ...args })
-      console.log(user)
       return user.save().catch((error) => {
         throw new GraphQLError('Creating the user failed', {
           extensions: {
@@ -228,23 +151,10 @@ start()
       }
     },
   },
-}*/
-
-/*const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-})
-
-startStandaloneServer(server, {
-  listen: { port: 4000 },
-  context: async ({ req, res }) => {
-    const auth = req ? req.headers.authorization : null
-    if (auth && auth.startsWith('Bearer ')) {
-      const decodedToken = jwt.verify(auth.substring(7), process.env.JWT_SECRET)
-      const currentUser = await User.findById(decodedToken.id)
-      return { currentUser }
-    }
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator('BOOK_ADDED'),
+    },
   },
-}).then(({ url }) => {
-  console.log(`Server ready at ${url}`)
-})*/
+}
+module.exports = resolvers
