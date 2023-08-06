@@ -1,6 +1,10 @@
 import { CoursePart } from '../types';
 
-const Total = ({ courseParts }: { courseParts: CoursePart[] }) => {
+interface Props {
+  courseParts: CoursePart[];
+}
+
+const Total = ({ courseParts }: Props) => {
   return (
     <div>
       <p>

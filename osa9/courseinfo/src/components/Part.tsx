@@ -1,6 +1,10 @@
 import { CoursePart } from '../types';
 
-const Part = ({ part }: { part: CoursePart }) => {
+interface Props {
+  part: CoursePart;
+}
+
+const Part = ({ part }: Props) => {
   const assertNever = (value: never): never => {
     throw new Error(
       `Unhandled discriminated union member: ${JSON.stringify(value)}`

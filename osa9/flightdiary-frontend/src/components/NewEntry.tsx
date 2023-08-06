@@ -3,7 +3,11 @@ import { createFlight } from '../diaryService';
 import { FlightDiary } from '../types';
 import Notification from './Notification';
 
-const NewEntry = ({ diaries }: { diaries: FlightDiary[] }) => {
+interface Props {
+  diaries: FlightDiary[];
+}
+
+const NewEntry = ({ diaries }: Props) => {
   const [date, setDate] = useState('');
   const [visibility, setVisibility] = useState('');
   const [weather, setWeather] = useState('');

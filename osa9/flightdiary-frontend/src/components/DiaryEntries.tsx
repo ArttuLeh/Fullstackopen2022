@@ -1,6 +1,10 @@
 import { FlightDiary } from '../types';
 
-const DiaryEntries = ({ diaries }: { diaries: FlightDiary[] }) => {
+interface Props {
+  diaries: FlightDiary[];
+}
+
+const DiaryEntries = ({ diaries }: Props) => {
   return (
     <div>
       <h2>Diary entries</h2>

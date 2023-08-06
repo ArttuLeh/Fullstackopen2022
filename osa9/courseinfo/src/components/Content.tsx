@@ -1,7 +1,11 @@
 import { CoursePart } from '../types';
 import Part from './Part';
 
-const Content = ({ courseParts }: { courseParts: CoursePart[] }) => {
+interface Props {
+  courseParts: CoursePart[];
+}
+
+const Content = ({ courseParts }: Props) => {
   return (
     <div>
       {courseParts.map((part, index) => (
