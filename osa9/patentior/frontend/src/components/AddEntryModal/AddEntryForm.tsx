@@ -60,16 +60,7 @@ const AddEntryForm = ({ onCancel, onSubmit, diagnosis }: Props) => {
   const [diagnosisCodes, setDiagnosisCodes] = useState<
     Array<Diagnosis['code']>
   >([]);
-  //const [diagnoseCode, setDiagnoseCode] = useState('');
-  /*const [discharge, setDischarge] = useState<Discharge>({
-    date: '',
-    criteria: '',
-  });*/
   const [employerName, setEmployerName] = useState('');
-  /*const [sickLeave, setSickLeave] = useState<SickLeave|undefined>({
-    startDate: '' ,
-    endDate: '',
-  });*/
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [dischargeDate, setDischargeDate] = useState('');
@@ -92,17 +83,6 @@ const AddEntryForm = ({ onCancel, onSubmit, diagnosis }: Props) => {
     const value = event.target.value;
     setDiagnosisCodes(typeof value === 'string' ? value.split(',') : value);
   };
-  /*const handleDischargeChange =
-    (field: keyof Discharge) =>
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setDischarge((prev) => ({ ...prev, [field]: event.target.value }));
-    };*/
-
-  /*const handleSickLeaveChange =
-    (field: keyof SickLeave) =>
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setSickLeave((prev) => ({ ...prev, [field]: event.target.value }));
-    };*/
 
   const addEntry = (event: SyntheticEvent) => {
     event.preventDefault();
